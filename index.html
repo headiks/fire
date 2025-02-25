@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Спичка и огонь</title>
+    <style>
+        body {
+            background-color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            height: 100vh; /* Высота экрана */
+            display: flex;
+            justify-content: center; /* Центрирование по горизонтали */
+            align-items: center; /* Центрирование по вертикали */
+            flex-direction: column; /* Вертикальное направление */
+            margin: 0; /* Убираем отступы по умолчанию */
+        }
+        #match, #burntMatch {
+            width: auto; /* Ширина по умолчанию */
+            height: 200px; /* Высота изображения спички */
+            position: relative; /* Позиционирование относительно контейнера */
+            z-index: 1; /* Спичка выше фона */
+        }
+        #fire {
+            position: absolute;
+            top: 0; /* Начальное положение гифки вверху спички */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px; /* Уменьшаем ширину гифки на 30% */
+            display: none; /* Скрываем гифку изначально */
+            z-index: 2; /* Убедимся, что гифка выше спички */
+        }
+        #message {
+            margin-top: 20px; /* Отступ сверху для сообщения */
+            font-size: 18px; /* Размер шрифта */
+            display: none; /* Скрываем сообщение изначально */
+        }
+        button {
+            margin-top: 20px; /* Отступ сверху для кнопки */
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        /* Адаптивный стиль для мобильных устройств */
+        @media (max-width: 600px) {
+            #match, #burntMatch {
+                height: 150px; /* Уменьшаем высоту изображений для мобильных */
+            }
+            #fire {
+                width: 105px; /* Уменьшаем ширину гифки на 30% для мобильных */
+            }
+            #message {
+                font-size: 16px; /* Уменьшаем размер шрифта для мобильных */
+            }
+        }
+    </style>
+</head>
+<body>
+    <img id="fire" src="fire.gif" alt="Огонь"> <!-- Гифка отображается над спичкой -->
+    <img id="match" src="match.png" alt="Спичка"> <!-- Обычная спичка -->
+    <img id="burntMatch" src="burnt_match.png" alt="Сгоревшая спичка" style="display:none;"> <!-- Сгоревшая спичка скрыта изначально -->
+    <button id="igniteBtn">Зажечь спичку</button> <!-- Кнопка -->
+    <div id="message"></div> <!-- Сообщение без текста изначально -->
+
+    <script>
+        document.getElementById('igniteBtn').addEventListener('click', function() {
+            const fire = document.getElementById('fire');
+            const match = document.getElementById('match'); // Получаем нормальную спичку
+            const burntMatch = document.getElementById('burntMatch');
+            fire.style.display = 'block'; // Показываем гифку
+            fire.style.transition = 'top 5s linear'; // Устанавливаем анимацию
+            fire.style.top = '200px'; // Конечное положение гифки (нижняя часть спички)
+
+            // Показываем сгоревшую спичку и сообщение через 5 секунд после начала анимации
+            setTimeout(function() {
+                fire.style.display = 'none'; // Скрываем гифку
+                match.style.display = 'none'; // Скрываем нормальную спичку
+                burntMatch.style.display = 'block'; // Показываем сгоревшую спичку
+
+                // Генерируем случайное сообщение
+                const messages = [
+                    'Ваше желание сбудется!',
+                    'Ваше желание не сбудется!'
+                ];
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                document.getElementById('message').textContent = randomMessage; // Показываем случайное сообщение
+                document.getElementById('message').style.display = 'block'; // Показываем сообщение
+                
+                // Меняем кнопку на "Ещё раз"
+                const button = document.getElementById('igniteBtn');
+                button.textContent = 'Ещё раз';
+                button.onclick = function() {
+                    location.reload(); // Перезагрузка страницы для повторного запуска
+                };
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
